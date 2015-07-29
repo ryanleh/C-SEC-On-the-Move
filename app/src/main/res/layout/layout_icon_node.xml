@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         app:iconText="@string/ic_keyboard_arrow_right"
         app:iconColor="#12558C"
-        app:iconFont="fonts/material-icon-font.ttf"
+        app:iconFont="fonts/fontawesome-webfont.ttf"
         app:iconSize="20dp" />
 
     <com.github.johnkil.print.PrintView
@@ -27,9 +27,9 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:iconText="@string/ic_email"
+        app:iconText="@string/ic_folder"
         app:iconColor="#12558C"
-        app:iconFont="fonts/material-icon-font.ttf"
+        app:iconFont="fonts/fontawesome-webfont.ttf"
         app:iconSize="24dp" />
 
     <TextView
@@ -41,6 +41,7 @@
         android:id="@+id/node_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <LinearLayout
         android:id="@+id/buttonsContainer"
         android:layout_centerVertical="true"
@@ -50,5 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
     </LinearLayout>
+
 </RelativeLayout>

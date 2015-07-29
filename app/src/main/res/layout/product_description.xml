@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/border"/>
+
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:padding="5dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/imageView"/>
+
+        <TextView
+            android:id="@+id/product_maker"
+            android:layout_width="110dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/imageView"
+            android:layout_below="@id/product_name"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_alignBottom="@id/imageView"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:layout_toLeftOf="@+id/buttonsContainer"
+            android:layout_toStartOf="@+id/buttonsContainer" />
+
+        <RelativeLayout
+            android:id="@+id/buttonsContainer"
+            android:layout_alignParentRight="true"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/product_name"
+            android:layout_alignBottom="@id/imageView"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal" >
+
+            <com.github.johnkil.print.PrintView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/product_rating1"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:iconText="@string/ic_star"
+                app:iconColor="#000000"
+                app:iconFont="fonts/fontawesome-webfont.ttf"
+                app:iconSize="13dp" />
+
+            <com.github.johnkil.print.PrintView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/product_rating2"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                app:iconText="@string/ic_star"
+                app:iconColor="#000000"
+                app:iconFont="fonts/fontawesome-webfont.ttf"
+                app:iconSize="13dp" />
+
+            <com.github.johnkil.print.PrintView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/product_rating3"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                app:iconText="@string/ic_star"
+                app:iconColor="#000000"
+                app:iconFont="fonts/fontawesome-webfont.ttf"
+                app:iconSize="13dp" />
+
+            <com.github.johnkil.print.PrintView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/product_rating4"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                app:iconText="@string/ic_star"
+                app:iconColor="#000000"
+                app:iconFont="fonts/fontawesome-webfont.ttf"
+                app:iconSize="13dp" />
+
+            <com.github.johnkil.print.PrintView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/product_rating5"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                app:iconText="@string/ic_star"
+                app:iconColor="#000000"
+                app:iconFont="fonts/fontawesome-webfont.ttf"
+                app:iconSize="13dp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/product_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_maker"
+            android:layout_marginTop="5dp"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/evaluation_capabilities_text"
+            android:layout_below="@id/product_description"
+            android:layout_margin="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/evaluation_capabilities_text"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/evaluation_container"
+            android:layout_below="@id/evaluation_capabilities_text">
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</ScrollView>
+
+
+

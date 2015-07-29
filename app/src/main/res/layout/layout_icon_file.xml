@@ -6,8 +6,6 @@
     android:background="?android:attr/selectableItemBackground"
     android:layout_height="match_parent">
 
-
-
     <com.github.johnkil.print.PrintView
         android:layout_alignParentLeft="true"
         android:id="@+id/icon"
@@ -15,9 +13,9 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:iconText="@string/ic_email"
+        app:iconText="@string/ic_open_folder"
         app:iconColor="#12558C"
-        app:iconFont="fonts/material-icon-font.ttf"
+        app:iconFont="fonts/fontawesome-webfont.ttf"
         app:iconSize="24dp" />
 
     <TextView
@@ -29,6 +27,7 @@
         android:id="@+id/node_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <LinearLayout
         android:id="@+id/buttonsContainer"
         android:layout_centerVertical="true"
@@ -38,7 +37,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
     </LinearLayout>
+
 </RelativeLayout>
 
 

@@ -1,0 +1,40 @@
+1:Analyze:false:1
+11:Malware Analysis:false:1
+111:Behaioral/Dynamic Analysis:false:1
+112:Code/Static Analysis:false:1
+113:Malware Decomposition:false:1
+12:Network Analysis:false:1
+121:Network Traffic Analysis:false:1
+122:Network Traffic Capture:false:1
+13:Risk Analysis:false:1
+131:Risk Analysis Support:false:1
+14:System Analysis:false:1
+141:Syslog Analysis:false:1
+2:Lifecycle Management:false:1
+21:Expansion/Upgrade Cost:false:1
+211:Cost of Major Release:false:1
+212:Cost of Minor Release:false:1
+213:Expansion Costs:false:1
+214:Upgrades Included in Maintenance/Support Contract:false:1
+215:Upgrades Included in Purchase Cost:false:1
+22:Initial Cost:false:1
+221:Cost of Base System:false:1
+23:Maintenance Cost:false:1
+231:Cost of Maintenance/Support Contract:false:1
+232: Software/Firmware Updates Included in Purchase Cost:false:1
+233:Software/Firmware Updates Not Included in Maintenance Cost:false:1
+24:Training/Support Cost:false:1
+241:Cost of Additional Training:false:1
+242:Duration of Training Included in Purchase Cost:false:1
+243:Product Documentation:false:1
+244:Required Training for System Administrator:false:1
+245:Technical Support Included in Purchase Cost:false:1
+246:Training Included in Purchase Cost:false:1
+3:Monitor/Detect:false:1
+4:Operations:false:1
+5:Performance:false:1
+6:Plan:false:1
+7:Product Deployment:false:1
+8:Protect:false:1
+9:Respond:false:1
+10:System Capabilities:false:1
