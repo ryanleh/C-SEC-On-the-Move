@@ -1,0 +1,19 @@
+
+
+
+
+
+
+SELECT base_techcategory._id,base_techcategory.cat FROM  base_techcategory
+
+
+SELECT base_techcategory._id,base_techcapability.cat_id,base_technology.cap_id,
+base_techcategory.cat,base_techcapability.cap,base_technology.technology FROM
+base_techcategory INNER JOIN base_techcapability ON base_techcategory._id =
+base_techcapability.cat_id
+
+
+ SELECT base_technology._id,base_technology.technology,base_techcategory.cat,base_techcategory._id,
+  base_techcapability.cap,base_techcapability._id,FROM base_techcategory
+        INNER JOIN base_techcapability ON base_techcategory._id = base_techcapability.cat_id INNER JOIN
+        base_technology ON base_techcapability._id = base_technology.cap_id ORDER BY base_technology.technology

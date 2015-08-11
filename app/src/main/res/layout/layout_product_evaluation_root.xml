@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout   xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:selectableItemBackground"
+    android:paddingTop="5.0dip"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:textSize="13.0sp"
+        android:id="@+id/evaluation_node_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13.0dip"
+        android:text="Evaluations"
+        android:layout_centerVertical="true"
+        android:color="#ff000000" />
+
+    <TextView
+        android:textSize="13.0sp"
+        android:id="@+id/evaluation_node_value"
+        android:paddingTop="2.0dip"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="2.0dip"
+        android:layout_toRightOf="@+id/evaluation_node_text"
+        android:layout_centerVertical="true"
+        android:color="#ff000000" />
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:id="@+id/product_eval_starsContainer"
+        android:padding="2.0dip"
+        android:layout_width="105.0dip"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/evaluation_node_text"
+        android:layout_alignBottom="@+id/evaluation_node_text">
+
+        <com.github.johnkil.print.PrintView android:id="@+id/eval_rating1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_centerHorizontal="true" android:layout_centerVertical="true" app:iconText="@string/ic_star" app:iconColor="#ff000000" app:iconSize="13.0dip" app:iconFont="fonts/fontawesome-webfont.ttf" />
+        <com.github.johnkil.print.PrintView android:id="@+id/eval_rating2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="20.0dip" android:layout_alignParentLeft="true" android:layout_centerHorizontal="true" android:layout_centerVertical="true" app:iconText="@string/ic_star" app:iconColor="#ff000000" app:iconSize="13.0dip" app:iconFont="fonts/fontawesome-webfont.ttf" />
+        <com.github.johnkil.print.PrintView android:id="@+id/eval_rating3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="40.0dip" android:layout_alignParentLeft="true" android:layout_centerHorizontal="true" android:layout_centerVertical="true" app:iconText="@string/ic_star" app:iconColor="#ff000000" app:iconSize="13.0dip" app:iconFont="fonts/fontawesome-webfont.ttf" />
+        <com.github.johnkil.print.PrintView android:id="@+id/eval_rating4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="60.0dip" android:layout_alignParentLeft="true" android:layout_centerHorizontal="true" android:layout_centerVertical="true" app:iconText="@string/ic_star" app:iconColor="#ff000000" app:iconSize="13.0dip" app:iconFont="fonts/fontawesome-webfont.ttf" />
+        <com.github.johnkil.print.PrintView android:id="@+id/eval_rating5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="80.0dip" android:layout_alignParentLeft="true" android:layout_centerHorizontal="true" android:layout_centerVertical="true" app:iconText="@string/ic_star" app:iconColor="#ff000000" app:iconSize="13.0dip" app:iconFont="fonts/fontawesome-webfont.ttf" />
+    </RelativeLayout>
+    <com.github.johnkil.print.PrintView android:id="@+id/eval_arrow" android:padding="15.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" app:iconText="@string/ic_keyboard_arrow_right" app:iconColor="#ff000000" app:iconSize="25.0dip" app:iconFont="fonts/fontawesome-webfont.ttf" />
+</RelativeLayout>
