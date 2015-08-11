@@ -12,70 +12,79 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.csec_otm.handlers.DBHelper;
-import com.app.csec_otm.interfaces.Product;
-import com.app.csec_otm.interfaces.ProductFile;
 import com.unnamed.b.atv.model.TreeNode;
 import com.app.csec_otm.R;
 import com.app.csec_otm.holders.IconTreeItemHolder;
 import com.unnamed.b.atv.view.AndroidTreeView;
-import com.app.csec_otm.interfaces.ProductClickedInterface;
+import com.app.csec_otm.interfaces.NodeClickedInterface;
 
 import java.util.LinkedHashMap;
 
 /**
  * Created by Ryan Lehmkuhl on 7/8/15.
  */
-public class ProductFolderStructureFragment extends Fragment{
-    private AndroidTreeView tView;
-    private View rootView;
-    private LinkedHashMap<String, TreeNode> node = new LinkedHashMap<>();
-    private ProductClickedInterface mCallback;
+
+public class ProductFolderStructureFragment extends Fragment {
     private DBHelper db;
+    private NodeClickedInterface mCallback;
+    private LinkedHashMap<String, TreeNode> node;
+    private View rootView;
+    private AndroidTreeView tView;
 
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onAttach(Activity paramActivity)
+    {
+        super.onAttach(paramActivity);
+        try
+        {
+            this.mCallback = ((NodeClickedInterface)paramActivity);
+            return;
+        }
+        catch (ClassCastException localClassCastException1)
+        {
+            ClassCastException localClassCastException2 = new ClassCastException(paramActivity.toString());
+            throw localClassCastException2;
+        }
     }
 
-    /**
-     * Reads from file to populate LinkedHashMap (TODO: read from server)
-     * Constructs TreeNode View from LinkedHashMap and passes to View
-     **/
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+    }
+
+    public View onCreateView(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup, Bundle savedInstanceState)
+    {
         getActivity().setTitle("Product Search");
-        //check to see if the fragment has already been made as not to wipe state
-        if(rootView == null) {
-            rootView = inflater.inflate(R.layout.folder_structure, null, false);
-            ViewGroup containerView = (ViewGroup) rootView.findViewById(R.id.container);
+
+        if (this.rootView == null)
+        {
+            this.rootView = paramLayoutInflater.inflate(R.layout.folder_structure, null, false);
+            ViewGroup localViewGroup = (ViewGroup)this.rootView.findViewById(R.id.container);
+
             TreeNode root = TreeNode.root();
-            db = new DBHelper(getActivity().getApplicationContext());
-            node = db.PopulateHash();
-            //method to add children based on id
+            DBHelper localDBHelper = new DBHelper(getActivity().getApplicationContext());
+            this.db = localDBHelper;
+            this.node = this.db.PopulateFileHash();
+
             for(String key : node.keySet()) {
                 String[] split = key.split(":");
                 if (split.length == 1) {
                     root.addChild(node.get(key));
                 } else {
                     String parent_id = split[0];
-                    int num = 1;
-
-                    for (int i = split.length; i > 2; i--) {
-                        parent_id += ":" + split[num];
-                        num++;
+                    for (int i = 1; i < (split.length - 1); i++) {
+                        parent_id += ":" + split[i];
                     }
                     node.get(parent_id).addChild(node.get(key));
                 }
             }
-            tView = new AndroidTreeView(getActivity(),root);
-            tView.setDefaultAnimation(true);
-            tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
-            tView.setDefaultViewHolder(IconTreeItemHolder.class);
-            tView.setDefaultNodeClickListener(nodeClickListener);
-            containerView.addView(tView.getView());
+
+            tView = new AndroidTreeView(getActivity(), root);
+            this.tView.setDefaultAnimation(true);
+            this.tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
+            this.tView.setDefaultViewHolder(IconTreeItemHolder.class);
+            this.tView.setDefaultNodeClickListener(this.nodeClickListener);
+            localViewGroup.addView(this.tView.getView());
             if (savedInstanceState != null) {
                 String state = savedInstanceState.getString("tState");
                 if (!TextUtils.isEmpty(state)) {
@@ -84,17 +93,6 @@ public class ProductFolderStructureFragment extends Fragment{
             }
         }
         return rootView;
-    }
-
-    /**
-     * Expands and collapses the nodes when the arrow icon is clicked
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-        }
-        return true;
     }
 
     /**
@@ -110,41 +108,17 @@ public class ProductFolderStructureFragment extends Fragment{
         }
     };
 
-
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("tState", tView.getSaveState());
-    }
-
-
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        // This makes sure that the container activity has implemented
-        // the callback interfaces. If not, it throws an exception
-        try {
-            mCallback = (ProductClickedInterface) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
-    @Override
-    public void onDestroyView() {
-        if (rootView.getParent() != null) {
-            ((ViewGroup)rootView.getParent()).removeView(rootView);
+    public void onDestroyView()
+    {
+        if (this.rootView.getParent() != null) {
+            ((ViewGroup)this.rootView.getParent()).removeView(this.rootView);
         }
         super.onDestroyView();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    public void onSaveInstanceState(Bundle paramBundle)
+    {
+        super.onSaveInstanceState(paramBundle);
+        paramBundle.putString("tState", this.tView.getSaveState());
     }
-    
-
 }

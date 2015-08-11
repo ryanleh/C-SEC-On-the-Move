@@ -1,156 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<ScrollView   xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <RelativeLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1">
+        android:weightSum="1.0">
 
         <ImageView
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
             android:id="@+id/imageView"
-            android:src="@drawable/border"/>
+            android:layout_width="140.0dip"
+            android:layout_height="140.0dip"
+            android:src="@drawable/border"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
 
         <TextView
+            android:textSize="18.0sp"
+            android:textStyle="bold"
+            android:textColor="#ff000000"
+            android:gravity="center"
             android:id="@+id/product_name"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:padding="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageView"/>
+            android:padding="5.0dip"
+            android:layout_width="fill_parent"
+            android:layout_height="90.0dip"
+            android:layout_toRightOf="@+id/imageView"
+            android:layout_alignParentTop="true" />
 
         <TextView
-            android:id="@+id/product_maker"
-            android:layout_width="110dp"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/imageView"
-            android:layout_below="@id/product_name"
-            android:gravity="center_horizontal|center_vertical"
-            android:layout_alignBottom="@id/imageView"
+            android:textSize="13.0sp"
             android:textStyle="bold"
-            android:textSize="13sp"
+            android:textColor="#ff000000"
+            android:gravity="center"
+            android:id="@+id/product_maker"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:layout_width="105.0dip"
+            android:layout_height="fill_parent"
             android:layout_toLeftOf="@+id/buttonsContainer"
+            android:layout_toRightOf="@+id/imageView"
+            android:layout_below="@+id/product_name"
+            android:layout_alignBottom="@+id/imageView"
             android:layout_toStartOf="@+id/buttonsContainer" />
 
         <RelativeLayout
+            android:orientation="horizontal"
             android:id="@+id/buttonsContainer"
-            android:layout_alignParentRight="true"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_below="@id/product_name"
-            android:layout_alignBottom="@id/imageView"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal" >
+            android:layout_width="105.0dip"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="10.0dip"
+            android:layout_below="@+id/product_name"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignParentRight="true">
 
             <com.github.johnkil.print.PrintView
-                android:layout_alignParentLeft="true"
                 android:id="@+id/product_rating1"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:iconText="@string/ic_star"
-                app:iconColor="#000000"
-                app:iconFont="fonts/fontawesome-webfont.ttf"
-                app:iconSize="13dp" />
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:iconText="@string/ic_star" app:iconColor="#ff000000"
+                app:iconSize="13.0dip"
+                app:iconFont="fonts/fontawesome-webfont.ttf" />
 
             <com.github.johnkil.print.PrintView
-                android:layout_alignParentLeft="true"
                 android:id="@+id/product_rating2"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="20dp"
-                app:iconText="@string/ic_star"
-                app:iconColor="#000000"
-                app:iconFont="fonts/fontawesome-webfont.ttf"
-                app:iconSize="13dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:iconText="@string/ic_star" app:iconColor="#ff000000"
+                app:iconSize="13.0dip"
+                app:iconFont="fonts/fontawesome-webfont.ttf" />
 
             <com.github.johnkil.print.PrintView
-                android:layout_alignParentLeft="true"
                 android:id="@+id/product_rating3"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="40dp"
-                app:iconText="@string/ic_star"
-                app:iconColor="#000000"
-                app:iconFont="fonts/fontawesome-webfont.ttf"
-                app:iconSize="13dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:iconText="@string/ic_star" app:iconColor="#ff000000"
+                app:iconSize="13.0dip"
+                app:iconFont="fonts/fontawesome-webfont.ttf" />
 
             <com.github.johnkil.print.PrintView
-                android:layout_alignParentLeft="true"
                 android:id="@+id/product_rating4"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="60dp"
-                app:iconText="@string/ic_star"
-                app:iconColor="#000000"
-                app:iconFont="fonts/fontawesome-webfont.ttf"
-                app:iconSize="13dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:iconText="@string/ic_star" app:iconColor="#ff000000"
+                app:iconSize="13.0dip"
+                app:iconFont="fonts/fontawesome-webfont.ttf" />
 
             <com.github.johnkil.print.PrintView
-                android:layout_alignParentLeft="true"
                 android:id="@+id/product_rating5"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="80dp"
-                app:iconText="@string/ic_star"
-                app:iconColor="#000000"
-                app:iconFont="fonts/fontawesome-webfont.ttf"
-                app:iconSize="13dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:iconText="@string/ic_star" app:iconColor="#ff000000"
+                app:iconSize="13.0dip"
+                app:iconFont="fonts/fontawesome-webfont.ttf" />
 
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/product_description"
-            android:layout_width="match_parent"
+            android:textSize="15.0sp"
+            android:textStyle="bold"
+            android:textColor="#ff000000"
+            android:id="@+id/product_description_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/product_maker"
-            android:layout_marginTop="5dp"
-            android:padding="10dp"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:text="Description"
+            android:layout_below="@+id/product_maker" />
+
+        <ImageView
+            android:id="@+id/black_line_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginTop="3.0dip"
+            android:layout_marginBottom="7.0dip"
+            android:src="@drawable/black_fading_line"
+            android:layout_below="@+id/product_description_text" />
+
+        <TextView
+            android:textColor="#ff000000"
+            android:id="@+id/product_description"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/black_line_description"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
         <TextView
+            android:textSize="15.0sp"
+            android:textStyle="bold"
+            android:textColor="#ff000000"
+            android:id="@+id/evaluation_capabilities_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/evaluation_capabilities_text"
-            android:layout_below="@id/product_description"
-            android:layout_margin="10dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/evaluation_capabilities_text"/>
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:layout_marginBottom="3.0dip"
+            android:text="@string/evaluation_capabilities_text"
+            android:layout_below="@+id/product_description" />
+
+        <ImageView
+            android:id="@+id/black_line_evaluation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginBottom="10.0dip"
+            android:src="@drawable/black_fading_line"
+            android:layout_below="@+id/evaluation_capabilities_text" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/evaluation_container"
-            android:layout_below="@id/evaluation_capabilities_text">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/evaluation_capabilities_text" />
 
-        </RelativeLayout>
-
-    </RelativeLayout>
-
+         </RelativeLayout>
 
 </ScrollView>
-
-
-

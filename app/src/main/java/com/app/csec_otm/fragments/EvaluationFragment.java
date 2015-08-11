@@ -10,55 +10,27 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.app.csec_otm.R;
 import com.app.csec_otm.handlers.DBHelper;
 import com.app.csec_otm.holders.EvaluationItemHolder;
 import com.app.csec_otm.interfaces.NodeClickedInterface;
-import com.github.johnkil.print.PrintView;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
-
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-/**
- * Created by Ryan Lehmkuhl on 7/15/15.
- */
-
-public class ProductDescriptionFragment extends Fragment {
+public class EvaluationFragment extends Fragment {
     private DBHelper db;
+    private String evaluator;
     private NodeClickedInterface mCallback;
+    private String name;
     private LinkedHashMap<String, TreeNode> node;
     private View rootView;
     private AndroidTreeView tView;
 
 
-    public void SetAvgProRating(String product, View rootView)
-    {
-        DBHelper db = new DBHelper(getActivity().getApplicationContext());
-        int i = db.CalcProductRating(product);
-        PrintView star1 = (PrintView)rootView.findViewById(R.id.product_rating1);
-        PrintView star2 = (PrintView)rootView.findViewById(R.id.product_rating2);
-        PrintView star3 = (PrintView)rootView.findViewById(R.id.product_rating3);
-        PrintView star4 = (PrintView)rootView.findViewById(R.id.product_rating4);
-        PrintView star5 = (PrintView)rootView.findViewById(R.id.product_rating5);
-        if (i < 5)
-        {
-            switch (i)
-            {
-                case 0:
-                    star1.setIconText(R.string.ic_star_empty);
-                case 1:
-                    star2.setIconText(R.string.ic_star_empty);
-                case 2:
-                    star3.setIconText(R.string.ic_star_empty);
-                case 3:
-                    star4.setIconText(R.string.ic_star_empty);
-                case 4:
-                    star5.setIconText(R.string.ic_star_empty);
-            }
-        }
-    }
 
     public void onAttach(Activity paramActivity)
     {
@@ -86,24 +58,17 @@ public class ProductDescriptionFragment extends Fragment {
         paramMenu.clear();
     }
 
-    public View onCreateView(LayoutInflater paramLayoutInflater, ViewGroup rootViewGroup, Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup, Bundle savedInstanceState)
     {
-        getActivity().setTitle("Product Description");
-        rootView = paramLayoutInflater.inflate(R.layout.product_description, null, false);
+        this.rootView = paramLayoutInflater.inflate(R.layout.layout_evaluation, null, false);
         ViewGroup localViewGroup = (ViewGroup)this.rootView.findViewById(R.id.evaluation_container);
-        TextView product_name = (TextView)this.rootView.findViewById(R.id.product_name);
-        TextView product_maker = (TextView)this.rootView.findViewById(R.id.product_maker);
-        TextView product_description = (TextView)this.rootView.findViewById(R.id.product_description);
-
         Bundle b = getArguments();
-        String name = b.getString("Product Name");
-        product_name.setText(name);
-        product_maker.setText("From " + b.getString("Product Maker"));
-        product_description.setText("''" + b.getString("Product Description") + "''");
-        SetAvgProRating(name, this.rootView);
+        this.name = b.getString("Product Name");
+        this.evaluator = b.getString("Evaluator Name");
+        getActivity().setTitle(name + " Product Evaluation");
         TreeNode root = TreeNode.root();
-        this.db = new DBHelper(getActivity().getApplicationContext());
-        this.node = db.PopulateEvalRootHash(name);
+        db = new DBHelper(getActivity().getApplicationContext());
+        this.node = db.PopulateEvalHash(name, evaluator);
 
         for(String key : node.keySet()) {
             String[] split = key.split(":");
@@ -133,15 +98,21 @@ public class ProductDescriptionFragment extends Fragment {
         return rootView;
     }
 
-    private TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener()
+    TreeNode.TreeNodeClickListener nodeClickListener = new TreeNode.TreeNodeClickListener()
     {
-        public void onClick(TreeNode paramAnonymousTreeNode, Object paramAnonymousObject)
+        public void onClick(TreeNode node, Object object)
         {
-            EvaluationItemHolder.EvaluationItem localEvaluationItem = (EvaluationItemHolder.EvaluationItem)paramAnonymousObject;
-            ProductDescriptionFragment.this.mCallback.onEvaluationClicked(localEvaluationItem);
+            EvaluationItemHolder.EvaluationItem item = (EvaluationItemHolder.EvaluationItem) object;
+            ViewSwitcher switcher;
+            if (item.rfe == 3)
+            {
+                switcher = (ViewSwitcher)node.getViewHolder().getView().findViewById(R.id.switcher);
+                switcher.showNext();
+
+            }
+
         }
     };
-
 
     public void onDestroyView()
     {
@@ -157,4 +128,3 @@ public class ProductDescriptionFragment extends Fragment {
         paramBundle.putString("tState", this.tView.getSaveState());
     }
 }
-

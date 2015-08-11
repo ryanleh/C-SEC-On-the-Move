@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout   xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:minHeight="48dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:layout_height="match_parent">
+    android:background="?android:selectableItemBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minHeight="48.0dip">
 
     <com.github.johnkil.print.PrintView
-        android:layout_alignParentLeft="true"
         android:id="@+id/icon"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         app:iconText="@string/ic_open_folder"
-        app:iconColor="#12558C"
-        app:iconFont="fonts/fontawesome-webfont.ttf"
-        app:iconSize="24dp" />
+        app:iconColor="#ff12558c"
+        app:iconSize="24.0dip"
+        app:iconFont="fonts/fontawesome-webfont.ttf" />
 
     <TextView
-        android:layout_centerVertical="true"
-        android:textSize="16sp"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/icon"
-        android:layout_toLeftOf="@+id/buttonsContainer"
+        android:textSize="16.0sp"
         android:id="@+id/node_value"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_toLeftOf="@+id/buttonsContainer"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_centerVertical="true" />
 
     <LinearLayout
+        android:orientation="vertical"
         android:id="@+id/buttonsContainer"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>
-
-

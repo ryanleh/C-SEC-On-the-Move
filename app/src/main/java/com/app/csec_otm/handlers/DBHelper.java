@@ -3,153 +3,261 @@ package com.app.csec_otm.handlers;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.ViewDebug;
 
 import com.app.csec_otm.R;
+import com.app.csec_otm.holders.EvaluationItemHolder;
+import com.app.csec_otm.holders.EvaluationItemHolder.EvaluationItem;
 import com.app.csec_otm.holders.IconTreeItemHolder;
+import com.app.csec_otm.holders.IconTreeItemHolder.IconTreeItem;
+import com.app.csec_otm.interfaces.Evaluation;
 import com.app.csec_otm.interfaces.Product;
-import com.app.csec_otm.interfaces.ProductFile;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.unnamed.b.atv.model.TreeNode;
-
 import java.util.LinkedHashMap;
 
-
-/**
- * Created by ryanleh on 7/28/15.
- */
-public class DBHelper extends SQLiteAssetHelper{
-
+public class DBHelper extends SQLiteAssetHelper
+{
     private static final String DATABASE_NAME = "csec.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String query_categories = "SELECT " + ProductFile.CATEGORIES_COLUMNS.ID + "," +
-            ProductFile.CATEGORIES_COLUMNS.CAT + " FROM " + ProductFile.TABLES.CATEGORIES +
-            " ORDER BY " + ProductFile.CATEGORIES_COLUMNS.CAT + " ASC";
-
-    private static final String query_capabilities = "SELECT " + ProductFile.CAPABILITIES_COLUMNS.ID + "," +
-            ProductFile.CAPABILITIES_COLUMNS.CAP + "," + ProductFile.CATEGORIES_COLUMNS.CAT + "," +
-            ProductFile.CATEGORIES_COLUMNS.ID + " FROM " + ProductFile.TABLES.CATEGORIES +
-            " INNER JOIN " + ProductFile.TABLES.CAPABILITIES + " ON " + ProductFile.CATEGORIES_COLUMNS.ID
-            + " = " + ProductFile.CAPABILITIES_COLUMNS.CAT_ID + " ORDER BY " + ProductFile.CAPABILITIES_COLUMNS.CAP;
-
-    private static final String query_technologies = "SELECT " + ProductFile.TECHNOLOGIES_COLUMNS.ID + "," +
-            ProductFile.TECHNOLOGIES_COLUMNS.TECHNOLOGY + "," + ProductFile.CATEGORIES_COLUMNS.CAT +
-            "," + ProductFile.CATEGORIES_COLUMNS.ID + "," + ProductFile.CAPABILITIES_COLUMNS.CAP +
-            "," + ProductFile.CAPABILITIES_COLUMNS.ID + " FROM " + ProductFile.TABLES.CATEGORIES +
-            " INNER JOIN " + ProductFile.TABLES.CAPABILITIES + " ON " + ProductFile.CATEGORIES_COLUMNS.ID
-            + "=" + ProductFile.CAPABILITIES_COLUMNS.CAT_ID + " INNER JOIN " + ProductFile.TABLES.TECHNOLOGIES
-            + " ON " + ProductFile.CAPABILITIES_COLUMNS.ID + "=" + ProductFile.TECHNOLOGIES_COLUMNS.CAP_ID
-            + " ORDER BY " + ProductFile.TECHNOLOGIES_COLUMNS.TECHNOLOGY;
-
-    private static final String query_tech_types = "SELECT " + ProductFile.TECH_TYPES_COLUMNS.ID
-            + "," + ProductFile.TECH_TYPES_COLUMNS.TECH_TYPE + "," + ProductFile.CATEGORIES_COLUMNS.CAT +
-            "," + ProductFile.CATEGORIES_COLUMNS.ID + "," + ProductFile.CAPABILITIES_COLUMNS.CAP +
-            "," + ProductFile.CAPABILITIES_COLUMNS.ID + "," + ProductFile.TECHNOLOGIES_COLUMNS.TECHNOLOGY
-            + "," + ProductFile.TECHNOLOGIES_COLUMNS.ID + " FROM " + ProductFile.TABLES.CATEGORIES
-            + " INNER JOIN " + ProductFile.TABLES.CAPABILITIES + " ON " + ProductFile.CATEGORIES_COLUMNS.ID
-            + "=" + ProductFile.CAPABILITIES_COLUMNS.CAT_ID + " INNER JOIN " + ProductFile.TABLES.TECHNOLOGIES
-            + " ON " + ProductFile.CAPABILITIES_COLUMNS.ID + "=" + ProductFile.TECHNOLOGIES_COLUMNS.CAP_ID
-            + " INNER JOIN " + ProductFile.TABLES.TECH_TYPES + " ON " + ProductFile.TECHNOLOGIES_COLUMNS.ID
-            + "=" + ProductFile.TECH_TYPES_COLUMNS.TECHNOLOGY_ID + " ORDER BY " + ProductFile.TECH_TYPES_COLUMNS.TECH_TYPE;
-
-
-
-    public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        //super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
+    public DBHelper(Context paramContext)
+    {
+        super(paramContext, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public LinkedHashMap<String,TreeNode> PopulateHash(){
-        LinkedHashMap<String,TreeNode> node = getProductFiles();
-        node = getProducts(node);
-        return node;
+    public LinkedHashMap<String, TreeNode> PopulateFileHash()
+    {
+        return getProducts(getProductFiles());
     }
 
-    public LinkedHashMap<String,TreeNode> getProductFiles(){
-        LinkedHashMap<String,TreeNode> node = new LinkedHashMap<>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        ProductFile file;
-        String parent_id;
-
-        Cursor cursor = db.rawQuery(query_categories, null);
-        if(cursor.moveToFirst()) {
-            do {
-                file = new ProductFile(cursor.getInt(0),cursor.getString(1), null);
-                node.put(file.getId(),new TreeNode(new IconTreeItemHolder.IconTreeItem(
-                        R.string.ic_folder,file.getName())));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        cursor = db.rawQuery(query_capabilities, null);
-        if(cursor.moveToFirst()) {
-            do {
-                file = new ProductFile(cursor.getInt(0),cursor.getString(1), cursor.getString(2)
-                        + cursor.getInt(3));
-                node.put(file.getParent_id() + ":" + file.getId(),new TreeNode(
-                        new IconTreeItemHolder.IconTreeItem(R.string.ic_folder,file.getName())));
-            } while (cursor.moveToNext());
-        }
-
-        cursor = db.rawQuery(query_technologies, null);
-        if(cursor.moveToFirst()) {
-            do {
-                parent_id = cursor.getString(2) + cursor.getString(3) + ":" + cursor.getString(4)
-                        + cursor.getString(5);
-                file = new ProductFile(cursor.getInt(0),cursor.getString(1), parent_id);
-                node.put(file.getParent_id() + ":" + file.getId(),new TreeNode(
-                        new IconTreeItemHolder.IconTreeItem(R.string.ic_folder,file.getName())));
-            } while (cursor.moveToNext());
-        }
-
-        cursor = db.rawQuery(query_tech_types, null);
-        if(cursor.moveToFirst()) {
-            do {
-                parent_id = cursor.getString(2) + cursor.getString(3) + ":" + cursor.getString(4)
-                        + cursor.getString(5) + ":" + cursor.getString(6) + cursor.getString(7);
-                file = new ProductFile(cursor.getInt(0),cursor.getString(1), parent_id);
-                node.put(file.getParent_id() + ":" + file.getId(),new TreeNode(
-                        new IconTreeItemHolder.IconTreeItem(R.string.ic_folder,file.getName())));
-            } while (cursor.moveToNext());
-        }
-
-        return node;
-    }
-
-    public LinkedHashMap<String,TreeNode> getProducts(LinkedHashMap<String,TreeNode> node){
-
-        return node;
-    }
-
-
-
-
-
-    /**public Cursor getEmployees() {
+    public LinkedHashMap<String, TreeNode> getProductFiles()
+    {
+        LinkedHashMap node = new LinkedHashMap();
         SQLiteDatabase db = getReadableDatabase();
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        String [] sqlSelect = {"_id", "cat"};
-        String sqlTables = "base_techcategory";
+        Cursor cursor = db.rawQuery(Product.P_SQL_COMMANDS.query_categories, null);
+        node = ProcessFileQuery(node,cursor);
 
-        qb.setTables(sqlTables);
-        Cursor c = qb.query(db, sqlSelect, null, null,
-                null, null, null);
+        cursor = db.rawQuery(Product.P_SQL_COMMANDS.query_capabilities, null);
+        node = ProcessFileQuery(node,cursor);
 
-        c.moveToFirst();
-        return c;
+        cursor = db.rawQuery(Product.P_SQL_COMMANDS.query_technologies, null);
+        node = ProcessFileQuery(node,cursor);
+
+        cursor = db.rawQuery(Product.P_SQL_COMMANDS.query_tech_types, null);
+        return ProcessFileQuery(node,cursor);
     }
 
-    public void add(TechCategory contact){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int id = 7;
-        String cat = "hello";
-        String slug = "idk";
-        String CreateHello ="INSERT INTO base_techcategory (_id, cat, slug) " +
-                "VALUES ('" + id + "', '" + cat + "', '"  + slug + "')";
-        db.execSQL(CreateHello);
-        db.close(); // Closing database connection
-    }**/
+    public LinkedHashMap<String, TreeNode> ProcessFileQuery(LinkedHashMap<String, TreeNode> node, Cursor cursor)
+    {
+        int count= cursor.getColumnCount();
+        if (count== 1)
+        {
+            cursor.moveToFirst();
+            do
+            {
+                Product product = new Product(cursor.getString(0));
+                String name = product.getName();
+                IconTreeItemHolder.IconTreeItem item = new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, product.getName());
+                TreeNode treeNode = new TreeNode(item);
+                node.put(name, treeNode);
+
+            } while (cursor.moveToNext());
+            cursor.close();
+            return node;
+        } else {
+
+            cursor.moveToFirst();
+            do
+            {
+                String parent_id = cursor.getString(0);
+                for (int j = 1; j < count- 1; j++)
+                {
+                    parent_id += ":" + cursor.getString(j);
+                }
+                Product product = new Product(cursor.getString(count- 1));
+                IconTreeItemHolder.IconTreeItem item = new IconTreeItemHolder.IconTreeItem(R.string.ic_folder, product.getName());
+                TreeNode treeNode = new TreeNode(item);
+                node.put(parent_id + ":" + product.getName(), treeNode);
+            } while (cursor.moveToNext());
+            return node;
+        }
+    }
+
+    public LinkedHashMap<String, TreeNode> getProducts(LinkedHashMap<String, TreeNode> node)
+    {
+        Cursor cursor = getReadableDatabase().rawQuery(Product.P_SQL_COMMANDS.query, null);
+        cursor.moveToFirst();
+        do
+        {
+            String parent_id = cursor.getString(0);
+            for (int i= 1; i< 5; i++)
+            {
+                parent_id += ":" + cursor.getString(i);
+            }
+            Product product = new Product(cursor.getString(4), cursor.getString(5), cursor.getString(6));
+            IconTreeItemHolder.IconTreeItem item = new IconTreeItemHolder.IconTreeItem(R.string.ic_file,
+                    product.getName(), product.getMaker(), product.getDescription());
+            TreeNode treeNode = new TreeNode(item);
+            node.put(parent_id + product.getName(), treeNode);
+        } while (cursor.moveToNext());
+        cursor.close();
+        return node;
+    }
+
+
+    public LinkedHashMap<String, TreeNode> PopulateEvalRootHash(String name)
+    {
+        LinkedHashMap<String,TreeNode> node = new LinkedHashMap<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_eval_root,
+                new String[]{name});
+        cursor.moveToFirst();
+        do
+        {
+            Cursor cursor1 = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_user_rating,
+                    new String[]{name,cursor.getString(0)});
+            Double rating = Double.valueOf(String.format("%.1f", CalcRating(cursor1)));
+            cursor1.close();
+            Evaluation eval = new Evaluation(cursor.getString(0), rating);
+            EvaluationItemHolder.EvaluationItem item = new EvaluationItemHolder.EvaluationItem(eval.getName(),
+                    eval.getAverage_rating(), cursor.getString(1), cursor.getString(2), cursor.getString(3));
+            TreeNode treeNode = new TreeNode(item);
+            node.put(eval.getName(), treeNode);
+        } while (cursor.moveToNext());
+        cursor.close();
+        return node;
+    }
+
+    public LinkedHashMap<String, TreeNode> PopulateEvalHash(String name, String evaluator)
+    {
+        LinkedHashMap<String,TreeNode> node = new LinkedHashMap<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_cap, null);
+        node = ProcessEvalQuery(node, cursor, db, name, evaluator, cursor.getColumnCount());
+
+        cursor = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_subcap, null);
+        node = ProcessEvalQuery(node, cursor, db, name, evaluator, cursor.getColumnCount());
+
+        cursor = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_subcap_element, null);
+        return ProcessEvalQuery(node, cursor, db, name, evaluator, cursor.getColumnCount());
+    }
+
+
+
+
+    public LinkedHashMap<String, TreeNode> ProcessEvalQuery(LinkedHashMap<String, TreeNode> node,
+                                                            Cursor cursor, SQLiteDatabase db,
+                                                            String name, String evaluator, int count) {
+        if (count == 1)
+        {
+            cursor.moveToFirst();
+            do
+            {
+                String cat = cursor.getString(0);
+                Cursor cursor1 = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_eval_rating
+                        + " AND base_capability.cap = ?", new String[] { name, evaluator, cat });
+                if (cursor1.getCount() != 0)
+                {
+                    Double rating = Double.valueOf(String.format("%.1f", CalcRating(cursor1)));
+                    Evaluation eval = new Evaluation(cat, rating);
+                    EvaluationItemHolder.EvaluationItem item = new EvaluationItemHolder.EvaluationItem(
+                            eval.getName(), eval.getAverage_rating(), 1);
+                    TreeNode treeNode = new TreeNode(item);
+                    node.put(eval.getName(), treeNode);
+                }
+                cursor1.close();
+            } while (cursor.moveToNext());
+
+            cursor.close();
+            return node;
+        } else if (count == 2){
+                cursor.moveToFirst();
+                do
+                {
+                    String cat = cursor.getString(1);
+                    String parent_id = cursor.getString(0);
+                    Cursor cursor1 = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_eval_rating
+                            + "AND base_subcapability.subcap = ?", new String[] { name, evaluator, cat });
+                    if (cursor1.getCount() != 0)
+                    {
+                        Double rating = Double.valueOf(String.format("%.1f", CalcRating(cursor1)));
+                        Evaluation eval = new Evaluation(cat, rating);
+                        EvaluationItemHolder.EvaluationItem item = new EvaluationItemHolder.EvaluationItem(eval.getName()
+                                ,eval.getAverage_rating(), 2);
+                        TreeNode treeNode = new TreeNode(item);
+                        node.put(parent_id + ":" + eval.getName(), treeNode);
+                    }
+                    cursor1.close();
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        else if (count == 3){
+            cursor.moveToFirst();
+            do
+            {
+                String cat = cursor.getString(2);
+                String parent_id = cursor.getString(0) + ":" + cursor.getString(1);
+                Cursor cursor1 = db.rawQuery(Evaluation.Evaluation_SQL_COMMANDS.query_eval_rating
+                        + "AND base_subcapabilityelement.subcap_element = ?", new String[] { name, evaluator, cat });
+                if (cursor1.getCount() != 0)
+                {
+                    cursor1.moveToFirst();
+                    do {
+                        Evaluation eval = new Evaluation(cat, 0.0);
+                        EvaluationItemHolder.EvaluationItem item = null;
+                        if(cursor1.getInt(4)==1) {
+                            item = new EvaluationItemHolder.EvaluationItem(
+                                    eval.getName(), 0.0D, cursor1.getString(5), 2);
+                        } else if (cursor1.getInt(1) == 0){
+                            item = new EvaluationItemHolder.EvaluationItem(
+                                    eval.getName(), cursor1.getInt(2), cursor1.getString(5), 0);
+                        } else if (cursor1.getInt(1) == 1){
+                            item = new EvaluationItemHolder.EvaluationItem(
+                                    eval.getName(), cursor1.getInt(3), cursor1.getString(5), 1);
+                        }
+                        TreeNode treeNode = new TreeNode(item);
+                        node.put(parent_id + ":" + eval.getName(), treeNode);
+                    }while (cursor1.moveToNext());
+                }
+                cursor1.close();
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return node;
+    }
+
+
+
+
+    public int CalcProductRating(String product)
+    {
+        return (int)CalcRating(getReadableDatabase().rawQuery(Product.P_SQL_COMMANDS.query_product_rating, new String[] { product }));
+    }
+
+    public double CalcRating(Cursor cursor)
+    {
+        double int_value = 0;
+        double bool_value = 0;
+        double int_count = 0;
+        double bool_count = 0;
+        cursor.moveToFirst();
+        do{
+            if(cursor.getInt(4) == 0){
+                switch(cursor.getInt(1)){
+                    case 0:
+                        bool_value += cursor.getInt(2);
+                        bool_count++;
+                        break;
+                    case 1:
+                        int_value += cursor.getInt(3);
+                        int_count += 2;
+                        break;
+                }
+            }
+        }while(cursor.moveToNext());
+
+        return (int)(Math.floor(50*((((bool_value/bool_count)*100)+((int_value/int_count)*100))/200)))/10;
+    }
 }
