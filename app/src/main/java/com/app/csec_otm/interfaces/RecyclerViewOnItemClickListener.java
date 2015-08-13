@@ -1,4 +1,4 @@
-package com.app.csec_otm.search;
+package com.app.csec_otm.interfaces;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

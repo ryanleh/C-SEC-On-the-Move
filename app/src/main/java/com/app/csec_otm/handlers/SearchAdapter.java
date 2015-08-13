@@ -1,13 +1,14 @@
-package com.app.csec_otm.search;
+package com.app.csec_otm.handlers;
 
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.app.csec_otm.holders.SearchItemHolder;
 
 import java.util.List;
 
@@ -16,10 +17,10 @@ import java.util.List;
  */
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ResultItem> dataSet;
+    private List<SearchItemHolder> dataSet;
 
     // Constructors ________________________________________________________________________________
-    public SearchAdapter (List<ResultItem> dataSet) {
+    public SearchAdapter (List<SearchItemHolder> dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -33,16 +34,10 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         // UI configuration
             android.view.ViewGroup.LayoutParams params = view.getLayoutParams();
-            params.height = CustomSearchableInfo.getResultItemHeight();
+            params.height = -1;
             view.setLayoutParams(params);
 
 
-        // Change layout based on the user option of one or two-lines mode
-        if (!CustomSearchableInfo.getIsTwoLineExhibition()) {
-            holder.subHeader.setVisibility(TextView.GONE);
-            holder.header.setTypeface(Typeface.DEFAULT);
-            view.invalidate();
-        }
 
         return holder;
     }
@@ -67,7 +62,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return dataSet.size();
     }
 
-    public ResultItem getItem (Integer position) {
+    public SearchItemHolder getItem (Integer position) {
         return dataSet.get(position);
     }
 

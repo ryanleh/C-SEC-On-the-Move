@@ -82,7 +82,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="NA" />
+                    android:text="NA"
+                    android:enabled="false"/>
 
             </LinearLayout>
 
@@ -108,7 +109,8 @@
                         android:layout_height="wrap_content"
                         android:button="@android:color/transparent"
                         android:text="0"
-                        android:drawableBottom="@drawable/custom_radio_button" />
+                        android:drawableBottom="@drawable/custom_radio_button"
+                        android:enabled="false"/>
 
                     <RadioButton
                         android:gravity="center"
@@ -119,7 +121,8 @@
                         android:layout_height="wrap_content"
                         android:button="@android:color/transparent"
                         android:text="1"
-                        android:drawableBottom="@drawable/custom_radio_button" />
+                        android:drawableBottom="@drawable/custom_radio_button"
+                        android:enabled="false"/>
 
                     <RadioButton
                         android:gravity="center"
@@ -129,7 +132,8 @@
                         android:layout_height="wrap_content"
                         android:button="@android:color/transparent"
                         android:text="2"
-                        android:drawableBottom="@drawable/custom_radio_button" />
+                        android:drawableBottom="@drawable/custom_radio_button"
+                        android:enabled="false"/>
 
                 </RadioGroup>
 

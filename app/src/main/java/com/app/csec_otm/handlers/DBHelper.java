@@ -6,16 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.app.csec_otm.R;
 import com.app.csec_otm.holders.EvaluationItemHolder;
-import com.app.csec_otm.holders.EvaluationItemHolder.EvaluationItem;
 import com.app.csec_otm.holders.IconTreeItemHolder;
-import com.app.csec_otm.holders.IconTreeItemHolder.IconTreeItem;
 import com.app.csec_otm.interfaces.Evaluation;
 import com.app.csec_otm.interfaces.Product;
-import com.app.csec_otm.search.ResultItem;
+import com.app.csec_otm.holders.SearchItemHolder;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.unnamed.b.atv.model.TreeNode;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -109,12 +106,12 @@ public class DBHelper extends SQLiteAssetHelper
         return node;
     }
 
-    public List<ResultItem> getSearchProducts(List<ResultItem> list) {
+    public List<SearchItemHolder> getSearchProducts(List<SearchItemHolder> list) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor product_cursor = db.rawQuery(Product.P_SQL_COMMANDS.query_product_search,null);
         product_cursor.moveToFirst();
         do{
-            list.add(new ResultItem(product_cursor.getString(0),product_cursor.getString(1),0,0,
+            list.add(new SearchItemHolder(product_cursor.getString(0),product_cursor.getString(1),0,0,
                     product_cursor.getString(2)));
         }while(product_cursor.moveToNext());
         product_cursor.close();

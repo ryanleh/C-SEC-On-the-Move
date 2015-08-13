@@ -86,32 +86,7 @@ public class EvaluationItemHolder extends TreeNode.BaseNodeViewHolder<Evaluation
                 NA_switch.setChecked(true);
             }
 
-            NA_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean bool) {
-                    compoundButton.setChecked(bool);
 
-                }
-            });
-            radio1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean bool) {
-                    compoundButton.setChecked(bool);
-                }
-            });
-
-            radio2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean bool) {
-                    compoundButton.setChecked(bool);
-                }
-            });
-            radio3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean bool) {
-                    compoundButton.setChecked(bool);
-                }
-            });
 
 
 

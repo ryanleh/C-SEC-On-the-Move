@@ -1,4 +1,4 @@
-package com.app.csec_otm.search;
+package com.app.csec_otm.holders;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Represents the set of information contained in one result row
  */
-public class ResultItem implements Parcelable {
+public class SearchItemHolder implements Parcelable {
 
     private String header;
     private String subHeader;
@@ -15,14 +15,14 @@ public class ResultItem implements Parcelable {
     private Integer rightIcon;
 
     // Constructors ________________________________________________________________________________
-    public ResultItem () {
+    public SearchItemHolder() {
         this.header = "Error";
         this.subHeader = "Error";
         this.leftIcon = com.app.csec_otm.R.drawable.clock_icon;
         this.rightIcon = com.app.csec_otm.R.drawable.arrow_left_up_icon;
     }
 
-    public ResultItem (String header, String subHeader, Integer leftIcon, Integer rightIcon, String description) {
+    public SearchItemHolder(String header, String subHeader, Integer leftIcon, Integer rightIcon, String description) {
         this.setHeader(header);
         this.setSubHeader(subHeader);
         this.setLeftIcon(leftIcon);
@@ -99,10 +99,10 @@ public class ResultItem implements Parcelable {
     }
 
     // Parcelable Creator Implementation ___________________________________________________________
-    public static final Creator<com.app.csec_otm.search.ResultItem> CREATOR = new Creator<com.app.csec_otm.search.ResultItem>() {
+    public static final Creator<SearchItemHolder> CREATOR = new Creator<SearchItemHolder>() {
 
-        public com.app.csec_otm.search.ResultItem createFromParcel(Parcel in) {
-            com.app.csec_otm.search.ResultItem resultItem = new com.app.csec_otm.search.ResultItem();
+        public SearchItemHolder createFromParcel(Parcel in) {
+            SearchItemHolder resultItem = new SearchItemHolder();
 
             resultItem.setHeader(in.readString());
             resultItem.setSubHeader(in.readString());
@@ -113,8 +113,8 @@ public class ResultItem implements Parcelable {
             return resultItem;
         }
 
-        public com.app.csec_otm.search.ResultItem[] newArray(int size) {
-            return new com.app.csec_otm.search.ResultItem[size];
+        public SearchItemHolder[] newArray(int size) {
+            return new SearchItemHolder[size];
         }
     };
 }

@@ -1,10 +1,8 @@
 package com.app.csec_otm.activities;
 
 import android.app.FragmentTransaction;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,11 +24,7 @@ import com.app.csec_otm.holders.EvaluationItemHolder;
 import com.app.csec_otm.holders.IconTreeItemHolder;
 import com.app.csec_otm.interfaces.NodeClickedInterface;
 
-import com.app.csec_otm.search.CustomSearchableInfo;
-import com.app.csec_otm.search.ResultItem;
-import com.app.csec_otm.search.SearchActivity;
-
-import javax.xml.transform.Result;
+import com.app.csec_otm.holders.SearchItemHolder;
 
 
 /**
@@ -122,7 +116,6 @@ public class SingleFragmentActivity extends AppCompatActivity implements NodeCli
         localFragmentTransaction.add(R.id.fragment_container, localProductFolderStructureFragment);
         localFragmentTransaction.commit();
 
-        CustomSearchableInfo.setTransparencyColor(Color.parseColor("#ccFFFFFF"));
 
         Intent intent = getIntent();
         handleIntent(intent);
@@ -135,14 +128,16 @@ public class SingleFragmentActivity extends AppCompatActivity implements NodeCli
     }
 
     private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction()) || Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Bundle bundle = this.getIntent().getExtras();
-            ResultItem receivedItem = bundle.getParcelable("Suggestion");
+            SearchItemHolder receivedItem = bundle.getParcelable("Suggestion");
             if (receivedItem != null) {
                 IconTreeItemHolder.IconTreeItem item = new IconTreeItemHolder.IconTreeItem(R.string.ic_file,
-                        receivedItem.getHeader(),receivedItem.getSubHeader(),receivedItem.getDescription());
+                        receivedItem.getHeader(), receivedItem.getSubHeader(), receivedItem.getDescription());
                 onProductClicked(item);
             }
+        } else {
+            Log.v("hi","hi");
         }
     }
 

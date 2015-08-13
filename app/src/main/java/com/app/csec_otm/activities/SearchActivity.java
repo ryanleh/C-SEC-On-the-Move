@@ -1,19 +1,15 @@
-package com.app.csec_otm.search;
+package com.app.csec_otm.activities;
 
-import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SearchRecentSuggestionsProvider;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,6 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.csec_otm.handlers.DBHelper;
+import com.app.csec_otm.holders.SearchItemHolder;
+import com.app.csec_otm.interfaces.RecyclerViewOnItemClickListener;
+import com.app.csec_otm.handlers.SearchAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +44,9 @@ public class SearchActivity extends AppCompatActivity {
 
     private String query;
     private DBHelper db;
-    private List<ResultItem> products;
+    private List<SearchItemHolder> products;
     private SearchAdapter all_products;
-    private List<ResultItem> products_filtered;
+    private List<SearchItemHolder> products_filtered;
 
     private String searchableActivity = "com.app.csec_otm.activities.SingleFragmentActivity";
     private Boolean isRecentSuggestionsProvider = Boolean.TRUE;
@@ -58,7 +57,9 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         this.setContentView(com.app.csec_otm.R.layout.custom_searchable);
-        this.getWindow().setStatusBarColor(getResources().getColor(com.app.csec_otm.R.color.textPrimaryColor));
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.getWindow().setStatusBarColor(getResources().getColor(com.app.csec_otm.R.color.textPrimaryColor));
+        }
 
         this.query = "";
         this.searchResultList = (RecyclerView) this.findViewById(com.app.csec_otm.R.id.cs_result_list);
@@ -71,6 +72,7 @@ public class SearchActivity extends AppCompatActivity {
         // Initialize result list
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         searchResultList.setLayoutManager(linearLayoutManager);
+        products_filtered = new ArrayList<>();
 
         this.db = new DBHelper(this);
         products = new ArrayList<>();
@@ -85,7 +87,7 @@ public class SearchActivity extends AppCompatActivity {
         implementResultListOnItemClickListener();
     }
 
-
+    // Gets the input from the voice search activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -101,7 +103,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     // Sends an intent with the typed query to the searchable Activity
-    private void sendSuggestionIntent(ResultItem item) {
+    private void sendSuggestionIntent(SearchItemHolder item) {
         try {
             Intent sendIntent = new Intent(this, Class.forName(searchableActivity));
             sendIntent.setAction(Intent.ACTION_VIEW);
@@ -122,15 +124,21 @@ public class SearchActivity extends AppCompatActivity {
     private void sendSearchIntent () {
         try {
             Intent sendIntent = new Intent(this, Class.forName(searchableActivity));
-            sendIntent.setAction(Intent.ACTION_SEARCH);
             sendIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             if(!products_filtered.isEmpty()){
-                sendIntent.putExtra(SearchManager.QUERY, products_filtered.get(0));
-            } else {
-                sendIntent.putExtra(SearchManager.QUERY, products.get(0));
+                sendIntent.setAction(Intent.ACTION_VIEW);
+                SearchItemHolder item = products_filtered.get(0);
+                Bundle b = new Bundle();
+                b.putParcelable("Suggestion", item);
+                sendIntent.putExtras(b);
+            }else{
+                Bundle b = new Bundle();
+                b.putString("Null","null");
+                sendIntent.putExtras(b);
             }
             startActivity(sendIntent);
             finish();
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -155,8 +163,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onTextChanged(final CharSequence s, int start, int before, int count) {
                 if (!"".equals(searchInput.getText().toString())) {
                     query = searchInput.getText().toString();
-                    products_filtered = new ArrayList<>();
-                    products_filtered = performSearch(products,query);
+                    products_filtered = performSearch(products, query);
                     SearchAdapter adapter = new SearchAdapter(products_filtered);
                     searchResultList.setAdapter(adapter);
                     setClearTextIcon();
@@ -166,17 +173,17 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
 
-            private List<ResultItem> performSearch(List<ResultItem> products, String query) {
+            private List<SearchItemHolder> performSearch(List<SearchItemHolder> products, String query) {
 
                 // First we split the query so that we're able
                 // to search word by word (in lower case).
                 String[] queryByWords = query.toLowerCase().split("\\s+");
 
                 // Empty list to fill with matches.
-                List<ResultItem> products_filtered = new ArrayList<>();
+                List<SearchItemHolder> products_filtered = new ArrayList<>();
 
                 // Go through initial releases and perform search.
-                for (ResultItem product : products) {
+                for (SearchItemHolder product : products) {
                     String product_queries = (product.getHeader() + " " + product.getSubHeader()).toLowerCase();
                     for (String word : queryByWords) {
                         int numberOfMatches = queryByWords.length;
@@ -237,7 +244,7 @@ public class SearchActivity extends AppCompatActivity {
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                     intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now");
 
-                    com.app.csec_otm.search.SearchActivity.this.startActivityForResult(intent, VOICE_RECOGNITION_CODE);
+                    SearchActivity.this.startActivityForResult(intent, VOICE_RECOGNITION_CODE);
                 }
             }
         });
@@ -249,7 +256,7 @@ public class SearchActivity extends AppCompatActivity {
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        ResultItem clickedItem = ((SearchAdapter) searchResultList.getAdapter()).getItem(position);
+                        SearchItemHolder clickedItem = ((SearchAdapter) searchResultList.getAdapter()).getItem(position);
                         sendSuggestionIntent(clickedItem);
                     }
                 }));
