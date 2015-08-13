@@ -3,13 +3,16 @@ package com.app.csec_otm.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.app.csec_otm.handlers.DBHelper;
 import com.unnamed.b.atv.model.TreeNode;
@@ -27,7 +30,7 @@ import java.util.LinkedHashMap;
 public class ProductFolderStructureFragment extends Fragment {
     private DBHelper db;
     private NodeClickedInterface mCallback;
-    private LinkedHashMap<String, TreeNode> node;
+    public LinkedHashMap<String, TreeNode> node;
     private View rootView;
     private AndroidTreeView tView;
 
@@ -94,6 +97,53 @@ public class ProductFolderStructureFragment extends Fragment {
         }
         return rootView;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu, menu);
+
+        final EditText editText = (EditText) menu.findItem(
+                R.id.action_search).getActionView();
+        editText.addTextChangedListener(textWatcher);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when collapsed
+                return true; // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                editText.clearFocus();
+                return true; // Return true to expand action view
+            }
+        });
+    }
+
+    private TextWatcher textWatcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+
+        }
+    };
 
     /**
      * Starts a new Fragment when a file is clicked

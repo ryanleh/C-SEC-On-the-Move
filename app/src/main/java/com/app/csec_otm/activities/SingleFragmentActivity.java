@@ -1,11 +1,15 @@
 package com.app.csec_otm.activities;
 
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,20 +26,35 @@ import com.app.csec_otm.holders.EvaluationItemHolder;
 import com.app.csec_otm.holders.IconTreeItemHolder;
 import com.app.csec_otm.interfaces.NodeClickedInterface;
 
+import com.app.csec_otm.search.CustomSearchableInfo;
+import com.app.csec_otm.search.ResultItem;
+import com.app.csec_otm.search.SearchActivity;
+
+import javax.xml.transform.Result;
+
+
 /**
  * Created by Ryan Lehmkuhl on 7/8/15.
  */
 
 
-public class SingleFragmentActivity extends ActionBarActivity implements NodeClickedInterface {
+public class SingleFragmentActivity extends AppCompatActivity implements NodeClickedInterface{
     private boolean SearchToF;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+    private ListView listView;
+
+    public boolean onCreateOptionsMenu(Menu paramMenu)
+    {
+        getMenuInflater().inflate(R.menu.menu, paramMenu);
+        this.SearchToF = false;
+        return true;
+    }
 
     private void addDrawerItems()
     {
-        String[] arrayOfString = { "Expand all", "Collapse all", "Add product", "Add layout_evaluation", "Sign out" };
+        String[] arrayOfString = { "Expand all", "Collapse all", "Add product", "Add evaluation", "Sign out" };
         ArrayAdapter localArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayOfString);
         this.mDrawerList.setAdapter(localArrayAdapter);
         ListView localListView = this.mDrawerList;
@@ -71,16 +90,6 @@ public class SingleFragmentActivity extends ActionBarActivity implements NodeCli
         this.mDrawerLayout.setDrawerListener(this.mDrawerToggle);
     }
 
-    public void OpenSearchBar() {
-        getActionB
-    }
-
-    public void SearchClick(MenuItem paramMenuItem)
-    {
-        if (!this.SearchToF) {
-            OpenSearchBar();
-        }
-    }
 
     public void onBackPressed()
     {
@@ -112,14 +121,32 @@ public class SingleFragmentActivity extends ActionBarActivity implements NodeCli
         FragmentTransaction localFragmentTransaction = getFragmentManager().beginTransaction();
         localFragmentTransaction.add(R.id.fragment_container, localProductFolderStructureFragment);
         localFragmentTransaction.commit();
+
+        CustomSearchableInfo.setTransparencyColor(Color.parseColor("#ccFFFFFF"));
+
+        Intent intent = getIntent();
+        handleIntent(intent);
     }
 
-    public boolean onCreateOptionsMenu(Menu paramMenu)
-    {
-        getMenuInflater().inflate(R.menu.menu, paramMenu);
-        this.SearchToF = false;
-        return true;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
     }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction()) || Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Bundle bundle = this.getIntent().getExtras();
+            ResultItem receivedItem = bundle.getParcelable("Suggestion");
+            if (receivedItem != null) {
+                IconTreeItemHolder.IconTreeItem item = new IconTreeItemHolder.IconTreeItem(R.string.ic_file,
+                        receivedItem.getHeader(),receivedItem.getSubHeader(),receivedItem.getDescription());
+                onProductClicked(item);
+            }
+        }
+    }
+
+
 
     public void onEvaluationClicked(EvaluationItemHolder.EvaluationItem paramEvaluationItem)
     {
@@ -132,20 +159,6 @@ public class SingleFragmentActivity extends ActionBarActivity implements NodeCli
         localFragmentTransaction.replace(R.id.fragment_container, localEvaluationFragment);
         localFragmentTransaction.addToBackStack(null);
         localFragmentTransaction.commit();
-    }
-
-    public boolean onOptionsItemSelected(MenuItem paramMenuItem)
-    {
-        if (this.mDrawerToggle.onOptionsItemSelected(paramMenuItem)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(paramMenuItem);
-    }
-
-    protected void onPostCreate(Bundle paramBundle)
-    {
-        super.onPostCreate(paramBundle);
-        this.mDrawerToggle.syncState();
     }
 
     public void onProductClicked(IconTreeItemHolder.IconTreeItem paramIconTreeItem)
@@ -161,4 +174,27 @@ public class SingleFragmentActivity extends ActionBarActivity implements NodeCli
         localFragmentTransaction.addToBackStack(null);
         localFragmentTransaction.commit();
     }
+    public boolean onOptionsItemSelected(MenuItem paramMenuItem)
+    {
+        int id = paramMenuItem.getItemId();
+
+        if (id == R.id.action_search) {
+            // Calls Custom Searchable Activity
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+
+            return true;
+        } else if (this.mDrawerToggle.onOptionsItemSelected(paramMenuItem)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(paramMenuItem);
+    }
+
+    protected void onPostCreate(Bundle paramBundle)
+    {
+        super.onPostCreate(paramBundle);
+        this.mDrawerToggle.syncState();
+    }
+
+
 }

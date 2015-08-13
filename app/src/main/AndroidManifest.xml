@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.app.csec_otm">
+
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="C-SEC On the Move"
+        android:label="C-SEC"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activities.Login_Activity"
             android:noHistory="true"
@@ -18,6 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SingleFragmentActivity" />
+        <activity android:name=".search.SearchActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:theme="@style/Theme.AppCompat.Translucent"/>
 
     </application>
 

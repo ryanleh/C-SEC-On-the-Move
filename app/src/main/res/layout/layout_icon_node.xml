@@ -34,7 +34,7 @@
     <TextView
         android:textSize="16.0sp"
         android:id="@+id/node_value"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10.0dip"
         android:layout_toLeftOf="@+id/buttonsContainer"

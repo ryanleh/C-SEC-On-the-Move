@@ -11,9 +11,13 @@ import com.app.csec_otm.holders.IconTreeItemHolder;
 import com.app.csec_otm.holders.IconTreeItemHolder.IconTreeItem;
 import com.app.csec_otm.interfaces.Evaluation;
 import com.app.csec_otm.interfaces.Product;
+import com.app.csec_otm.search.ResultItem;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.unnamed.b.atv.model.TreeNode;
+
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class DBHelper extends SQLiteAssetHelper
 {
@@ -45,7 +49,7 @@ public class DBHelper extends SQLiteAssetHelper
         node = ProcessFileQuery(node,cursor);
 
         cursor = db.rawQuery(Product.P_SQL_COMMANDS.query_tech_types, null);
-        return ProcessFileQuery(node,cursor);
+        return ProcessFileQuery(node, cursor);
     }
 
     public LinkedHashMap<String, TreeNode> ProcessFileQuery(LinkedHashMap<String, TreeNode> node, Cursor cursor)
@@ -104,6 +108,19 @@ public class DBHelper extends SQLiteAssetHelper
         cursor.close();
         return node;
     }
+
+    public List<ResultItem> getSearchProducts(List<ResultItem> list) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor product_cursor = db.rawQuery(Product.P_SQL_COMMANDS.query_product_search,null);
+        product_cursor.moveToFirst();
+        do{
+            list.add(new ResultItem(product_cursor.getString(0),product_cursor.getString(1),0,0,
+                    product_cursor.getString(2)));
+        }while(product_cursor.moveToNext());
+        product_cursor.close();
+        return list;
+    }
+
 
 
     public LinkedHashMap<String, TreeNode> PopulateEvalRootHash(String name)
